@@ -2,9 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TeamProject.h"
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
+
+
 
 UCLASS()
 class TEAMPROJECT_API AEnemyCharacter : public ACharacter
@@ -23,14 +25,55 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PostInitializeComponents() override;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void Attact();
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	void Attack();
+
+	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+	
+	void AttackStartComboState();
+	void AttackEndComboState();
+
+	void AttackCheck();
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack)
+	bool IsAttacking;
+	
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack)
+	bool CanNextCombo;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack)
+	bool IsComboInputOn;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack)
+	int32 CurrentCombo;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack)
+	int32 MaxCombo;
+	
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack)
+	float AttackRange;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack)
+	float AttackRadius;
+
+	UPROPERTY()
+	class UEnemyAnimInstance* AttackAnim;
+
+
+	
+
 
 private:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+	
 
 
 	UPROPERTY(EditAnywhere)

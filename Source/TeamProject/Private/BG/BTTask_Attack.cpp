@@ -4,6 +4,7 @@
 #include "BG/BTTask_Attack.h"
 #include "AIController.h"
 #include "EnemyCharacter.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_Attack::UBTTask_Attack()
 {
@@ -19,13 +20,18 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 		return EBTNodeResult::Failed;
 	}
 
-	AEnemyCharacter* Character = Cast<AEnemyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
-	if (Character == nullptr)
+	AEnemyCharacter* ControllingPawn = Cast<AEnemyCharacter>(OwnerComp.GetAIOwner()->GetPawn());
+	if (ControllingPawn == nullptr)
 	{
 		return EBTNodeResult::Failed;
 	}
-	Character->Attact();
+
+
+
 	
+	ControllingPawn->Attack();
+	
+
 	return EBTNodeResult::Succeeded;
 }
 
